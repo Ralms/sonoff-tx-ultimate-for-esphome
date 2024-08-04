@@ -113,7 +113,7 @@ logger:
     uart_debug: INFO
 
 dashboard_import:
-  package_import_url: github://SmartHome-yourself/sonoff-tx-ultimate-for-esphome/tx_ultimate.yaml@main
+  package_import_url: github://Ralms/sonoff-tx-ultimate-for-esphome/tx_ultimate.yaml@main
   import_full_config: false
 
 api:
@@ -307,17 +307,20 @@ switch:
       then:
         - script.execute: refresh_led_default
 
-  - platform: gpio
-    id: relay_3
-    name: "${friendly_name} L3"
-    pin: ${relay_3_pin}
-    restore_mode: RESTORE_DEFAULT_OFF
-    on_turn_on:
-      then:
-        - script.execute: refresh_led_default
-    on_turn_off:
-      then:
-        - script.execute: refresh_led_default
+  - !if 
+    condition: "${ relay_count >= 3 }"
+    then:
+      platform: gpio
+      id: relay_3
+      name: "${friendly_name} L3"
+      pin: ${relay_3_pin}
+      restore_mode: RESTORE_DEFAULT_OFF
+      on_turn_on:
+        then:
+          - script.execute: refresh_led_default
+      on_turn_off:
+        then:
+          - script.execute: refresh_led_default
 
   - platform: gpio
     id: vibra
