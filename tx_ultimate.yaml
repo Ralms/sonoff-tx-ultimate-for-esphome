@@ -169,7 +169,7 @@ globals:
     initial_value: ${touch_color}    
 
 number:
-  ##### VIBRATION TIME #####
+  ##### VIBRATION TIME CONFIGURATION#####
   - id: config_vibration_time
     name: Vibration Time
     platform: template
@@ -183,7 +183,7 @@ number:
     restore_value: true
     optimistic: true
 
-  ##### SCREEN BRIGHTNESS #####
+  ##### SCREEN BRIGHTNESS CONFIGURATION#####
   - id: config_flash_brightness
     name: LED Flash Brightness
     platform: template
@@ -285,7 +285,7 @@ binary_sensor:
 switch:
   - platform: gpio
     id: relay_1
-    name: "${friendly_name} L1"
+    name: "Relay L1"
     pin: ${relay_1_pin}
     restore_mode: RESTORE_DEFAULT_OFF
     on_turn_on:
@@ -297,7 +297,7 @@ switch:
 
   - platform: gpio
     id: relay_2
-    name: "${friendly_name} L2"
+    name: "Relay L2"
     pin: ${relay_2_pin}
     restore_mode: RESTORE_DEFAULT_OFF
     on_turn_on:
@@ -312,7 +312,7 @@ switch:
     then:
       platform: gpio
       id: relay_3
-      name: "${friendly_name} L3"
+      name: "Relay L3"
       pin: ${relay_3_pin}
       restore_mode: RESTORE_DEFAULT_OFF
       on_turn_on:
@@ -426,7 +426,7 @@ light:
   - platform: partition
     name: "LEDs Nightlight"
     id: leds_nightlight
-    internal: false
+    internal: true
     segments:
       - id: leds
         from: 0
