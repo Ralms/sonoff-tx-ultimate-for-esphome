@@ -169,7 +169,7 @@ globals:
     initial_value: ${touch_color}    
 
 number:
-  ##### SCREEN BRIGHTNESS #####
+  ##### VIBRATION TIME #####
   - id: config_vibration_time
     name: Vibration Time
     platform: template
@@ -390,7 +390,7 @@ light:
           name: "Pulse"
           transition_length: 1.4s
           update_interval: 1s
-
+    internal: false
     on_turn_off:
       then:
         - script.execute: refresh_led_default
@@ -423,7 +423,7 @@ light:
   - platform: partition
     name: "LEDs Nightlight"
     id: leds_nightlight
-    internal: true
+    internal: false
     segments:
       - id: leds
         from: 0
