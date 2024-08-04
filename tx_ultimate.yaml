@@ -61,9 +61,6 @@ substitutions:
 
   touchpanel_power_pin: GPIO5
 
-packages:
-  remote_package_switches: github://Ralms/sonoff-tx-ultimate-for-esphome/child_configs/${relay_count}_relay.yaml@main
-
 esphome:
   name: ${name}
   friendly_name: ${friendly_name}
@@ -285,6 +282,7 @@ binary_sensor:
       - script.execute: refresh_led_default
 
 switch:
+  <<: !include "${relay_count}_relay.yaml"
 
   - platform: gpio
     id: vibra
