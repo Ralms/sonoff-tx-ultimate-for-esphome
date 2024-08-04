@@ -168,7 +168,19 @@ globals:
     restore_value: no
     initial_value: ${touch_color}    
 
-
+number:
+  ##### SCREEN BRIGHTNESS #####
+  - id: flash_brightness
+    name: LED Flash Brightness
+    platform: template
+    entity_category: config
+    unit_of_measurement: '%'
+    min_value: 1
+    max_value: 100
+    initial_value: 100
+    step: 1
+    restore_value: true
+    optimistic: true
 
 binary_sensor:
   - platform: template
