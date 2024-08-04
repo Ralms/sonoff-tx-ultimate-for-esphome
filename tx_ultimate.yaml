@@ -283,42 +283,7 @@ binary_sensor:
       - script.execute: refresh_led_default
 
 switch:
-  - platform: gpio
-    id: relay_1
-    name: "Relay L1"
-    pin: ${relay_1_pin}
-    restore_mode: RESTORE_DEFAULT_OFF
-    on_turn_on:
-      then:
-        - script.execute: refresh_led_default
-    on_turn_off:
-      then:
-        - script.execute: refresh_led_default
-
-  - platform: gpio
-    id: relay_2
-    name: "Relay L2"
-    pin: ${relay_2_pin}
-    restore_mode: RESTORE_DEFAULT_OFF
-    on_turn_on:
-      then:
-        - script.execute: refresh_led_default
-    on_turn_off:
-      then:
-        - script.execute: refresh_led_default
-
-  - platform: gpio
-    id: relay_3
-    name: "Relay L3"
-    pin: ${relay_3_pin}
-    restore_mode: RESTORE_DEFAULT_OFF
-    internal: !lambda 'return relay_count > 2;'
-    on_turn_on:
-      then:
-        - script.execute: refresh_led_default
-    on_turn_off:
-      then:
-        - script.execute: refresh_led_default
+<<: !include "child_configs/${relay_count}_relay.yaml"
 
   - platform: gpio
     id: vibra
