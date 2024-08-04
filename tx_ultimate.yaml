@@ -62,11 +62,7 @@ substitutions:
   touchpanel_power_pin: GPIO5
 
 packages:
-  remote_package_switches:
-    url: https://github.com/Ralms/sonoff-tx-ultimate-for-esphome
-    ref: main
-    files: [child_configs/${relay_count}_relay.yaml]
-    refresh: 1s
+  remote_package_switches: github://Ralms/sonoff-tx-ultimate-for-esphome/child_configs/${relay_count}_relay.yaml@main
 
 esphome:
   name: ${name}
