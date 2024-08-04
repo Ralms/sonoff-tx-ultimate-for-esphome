@@ -170,7 +170,21 @@ globals:
 
 number:
   ##### SCREEN BRIGHTNESS #####
-  - id: flash_brightness
+  - id: config_vibration_time
+    name: Vibration Time
+    platform: template
+    entity_category: config
+    unit_of_measurement: 'ms'
+    min_value: 1
+    max_value: 300
+    initial_value: 150
+    step: 1
+    mode: box
+    restore_value: true
+    optimistic: true
+
+  ##### SCREEN BRIGHTNESS #####
+  - id: config_flash_brightness
     name: LED Flash Brightness
     platform: template
     entity_category: config
