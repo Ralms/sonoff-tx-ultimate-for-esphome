@@ -351,14 +351,6 @@ light:
     id: leds
     default_transition_length: 0s
     effects:
-      - addressable_rainbow:
-          name: "Rainbow"
-          speed: 30
-          width: 8
-      - pulse:
-          name: "Pulse"
-          transition_length: 1.4s
-          update_interval: 1s
       - wled:
     internal: false
     on_turn_off:
