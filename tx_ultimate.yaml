@@ -342,7 +342,7 @@ switch:
     name: "${friendly_name} Restart"
 
 light:
-  - platform: status_led
+  - platform: partition
     name: "Virtual Light"
     id: virtual_light_test
 
