@@ -372,9 +372,10 @@ light:
       - id: leds
         from: 7
         to: 7
-    on_turn_on: 
+    on_state: 
       then: 
         - script.execute: blockAction
+        
   - platform: partition
     name: "LEDs Button middle"
     id: leds_button_middle
