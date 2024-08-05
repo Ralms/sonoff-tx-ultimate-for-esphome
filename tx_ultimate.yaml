@@ -341,9 +341,14 @@ switch:
   - platform: restart
     name: "${friendly_name} Restart"
 
-wled:
-
 light:
+  - latform: template
+    name: "Virtual Light"
+    id: virtual_light_test
+    turn_on: 
+    turn_off:
+    set_level:
+
   - platform: neopixelbus
     type: GRB
     variant: WS2811
@@ -361,7 +366,6 @@ light:
           name: "Pulse"
           transition_length: 1.4s
           update_interval: 1s
-      - wled:
     internal: false
     on_turn_off:
       then:
