@@ -359,6 +359,7 @@ light:
           name: "Pulse"
           transition_length: 1.4s
           update_interval: 1s
+      - wled:
     internal: false
     on_turn_off:
       then:
