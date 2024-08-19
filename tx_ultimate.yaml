@@ -91,7 +91,7 @@ esp32:
 
 logger:
 #  hardware_uart: UART2
-  level: DEBUG
+  level: VERBOSE
   logs:
     binary_sensor: INFO
     light: INFO
