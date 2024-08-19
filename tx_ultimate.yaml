@@ -283,7 +283,7 @@ switch:
     name: "${friendly_name} Vibration"
     restore_mode: ALWAYS_OFF
     on_turn_on:
-      - delay: ${vibra_time}
+      - delay: !lambda "id(config_vibration_time).state"
       - switch.turn_off: vibra
 
   - platform: gpio
@@ -461,6 +461,7 @@ tx_ultimate_touch:
 
   on_press:
     - script.execute: led_on_touch
+    - switch.turn_on: vibra
     - lambda: >
         ESP_LOGD("tx_ultimate_touch.on_press", "Touch Position: %d / State: %d", touch.x, touch.state);
 
@@ -468,8 +469,6 @@ tx_ultimate_touch:
     - script.execute:
         id: handle_release
         pos: !lambda "return touch.x;"
-
-    - switch.turn_on: vibra
 
     - lambda: >
         ESP_LOGD("tx_ultimate_touch.on_release", "Release Position: %d / State: %d", touch.x, touch.state);
@@ -501,7 +500,7 @@ tx_ultimate_touch:
   on_full_touch_release:
     - script.execute: led_on_full_touch
 
-    - switch.turn_on: vibra
+    #- switch.turn_on: vibra
 
     - binary_sensor.template.publish:
         id: multi_touch
@@ -513,7 +512,7 @@ tx_ultimate_touch:
   on_long_touch_release:
     - script.execute: led_on_long_touch
 
-    - switch.turn_on: vibra
+    #- switch.turn_on: vibra
 
     - binary_sensor.template.publish:
         id: long_press
