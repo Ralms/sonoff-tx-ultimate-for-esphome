@@ -283,7 +283,7 @@ switch:
     name: "${friendly_name} Vibration"
     restore_mode: ALWAYS_OFF
     on_turn_on:
-      - delay: !lambda "return id(config_vibration_time).state"
+      - delay: !lambda "return id(config_vibration_time).state;"
       - switch.turn_off: vibra
 
   - platform: gpio
