@@ -602,7 +602,7 @@ script:
           green: !lambda "return id(button_color)[1]/100.0;"
           blue:  !lambda "return id(button_color)[2]/100.0;"
 
-- id: led_off_button_right
+  - id: led_off_button_right
     mode: restart
     then:
       - light.turn_off:
