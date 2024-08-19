@@ -14,13 +14,6 @@ substitutions:
   button_brightness: "0.7"
   button_color: "{0,0,100}"
 
-  nightlight: "on"
-  nightlight_brightness: "0.2"
-  nightlight_color: "{80,70,0}"
-
-  latitude: "50.123456°"
-  longitude: "5.654321°"
-
   touch_brightness: "1"
   touch_color: "{0,100,100}"
   touch_effect: "Scan"
@@ -90,7 +83,6 @@ esphome:
           id: long_press
           state: OFF
       - script.execute: refresh_led_default
-      - script.execute: refresh_nightlight
 
 esp32:
   board: esp32dev
@@ -105,8 +97,8 @@ logger:
     light: INFO
     script: INFO
     switch: INFO
-    tx_ultimate_touch: INFO
-    uart_debug: INFO
+    tx_ultimate_touch: VERBOSE
+    uart_debug: DEBUG
 
 dashboard_import:
   package_import_url: github://Ralms/sonoff-tx-ultimate-for-esphome/tx_ultimate.yaml@main
@@ -135,10 +127,6 @@ external_components:
 
 
 globals:
-  - id: nightlight_color
-    type: int [3]
-    restore_value: no
-    initial_value: ${nightlight_color}
   - id: button_color
     type: int [3]
     restore_value: no
@@ -180,6 +168,7 @@ number:
     optimistic: true
 
   ##### SCREEN BRIGHTNESS CONFIGURATION#####
+  # To migrate to respective Light entity. 
   - id: config_flash_brightness
     name: LED Flash Brightness
     platform: template
@@ -313,40 +302,32 @@ switch:
     internal: true
     restore_mode: RESTORE_DEFAULT_ON
 
-  - platform: template
-    name: "Nightlight"
-    id: nightlight
-    internal: true
-    optimistic: true
-    restore_mode: RESTORE_DEFAULT_OFF
-    on_turn_on:
-      then:
-        - script.execute: refresh_led_default
-    on_turn_off:
-      then:
-        - script.execute: refresh_led_default
-
-  - platform: template
-    name: "Nightlight"
-    id: nightlight_active
-    optimistic: true
-    restore_mode: RESTORE_DEFAULT_OFF
-    on_turn_on:
-      then:
-        - script.execute: refresh_led_default
-    on_turn_off:
-      then:
-        - script.execute: refresh_led_default
-
   - platform: restart
     name: "${friendly_name} Restart"
+
+# button left: animation + color + intensity
+# button right: animation + color + intensity
+# Multi-touch: Animation + color + intensity
+# swipe swipe LtR: Animation + color + intensity
+# swipe swipe RtL: Animation + color + intensity
+# Long press + Swipe: ?? Not sure if possible
+
+# Essentially, animations can be: 
+#   - Scan (goes back and forth on a section)
+#   - Meter (like a sound meter, going from 1 LED on to all On, increasing the number of LEDs over time)
+#   - Pulse (Turn on all LEDs at once)
+#   - Rainbow
+
+# All these should be configured on each respective Light entity configuration. 
+# Light entities can be turned on or off in HA, where being "off" just instructs the switch to not do any light effect with a respective touch. 
+
 
 light:
   - platform: neopixelbus
     type: GRB
     variant: WS2811
     pin: ${led_pin}
-    num_leds: 28
+    num_leds: 28 # 28 Physical LEDs, extra LEDs are used for configuration purpose.
     name: "NeoPixel Light"
     id: leds
     default_transition_length: 0s
@@ -542,33 +523,11 @@ time:
     #    then:
      #     - script.execute: refresh_nightlight
 
-sun:
-  latitude: ${latitude}
-  longitude: ${longitude}
-
-
 script:
   - id: blockAction
     mode: restart
     then:
       - logger.log: "BlockedLight"
-
-  - id: refresh_nightlight
-    mode: restart
-    then:
-      - if:
-          condition:
-            lambda: 'return "${nightlight}" == "on";'
-          then:
-            - if:
-                condition:
-                  - sun.is_below_horizon:
-                then:
-                  - switch.turn_on:
-                      id: nightlight
-                else:
-                  - switch.turn_off:
-                      id: nightlight
 
   - id: refresh_led_default
     mode: restart
@@ -590,14 +549,6 @@ script:
             - script.execute: led_on_button_middle
           else:
             - script.execute: led_off_button_middle
-
-      - if:
-          condition:
-            lambda: "return id(nightlight).state || id(nightlight_active).state;"
-          then:
-            - script.execute: led_on_nightlight
-          else:
-            - light.turn_off: leds_nightlight
 
   - id: led_on_button_left
     mode: restart
@@ -629,69 +580,6 @@ script:
           green: !lambda "return id(button_color)[1]/100.0;"
           blue:  !lambda "return id(button_color)[2]/100.0;"
 
-
-  - id: led_off_button_left
-    mode: restart
-    then:
-      - if:
-          condition:
-            lambda: "return id(nightlight).state || id(nightlight_active).state;"
-          then:
-            - light.turn_on:
-                id: leds_button_left
-                brightness: ${nightlight_brightness}
-                red: !lambda "return id(nightlight_color)[0]/100.0;"
-                green: !lambda "return id(nightlight_color)[1]/100.0;"
-                blue:  !lambda "return id(nightlight_color)[2]/100.0;"
-          else:
-            - light.turn_off:
-                id: leds_button_left
-
-  - id: led_off_button_middle
-    mode: restart
-    then:
-      - if:
-          condition:
-            lambda: "return id(nightlight).state || id(nightlight_active).state;"
-          then:
-            - light.turn_on:
-                id: leds_button_middle
-                brightness: ${nightlight_brightness}
-                red: !lambda "return id(nightlight_color)[0]/100.0;"
-                green: !lambda "return id(nightlight_color)[1]/100.0;"
-                blue:  !lambda "return id(nightlight_color)[2]/100.0;"
-          else:
-            - light.turn_off:
-                id: leds_button_middle
-
-
-  - id: led_off_button_right
-    mode: restart
-    then:
-      - if:
-          condition:
-            lambda: "return id(nightlight).state || id(nightlight_active).state;"
-          then:
-            - light.turn_on:
-                id: leds_button_right
-                brightness: ${nightlight_brightness}
-                red: !lambda "return id(nightlight_color)[0]/100.0;"
-                green: !lambda "return id(nightlight_color)[1]/100.0;"
-                blue:  !lambda "return id(nightlight_color)[2]/100.0;"
-          else:
-            - light.turn_off:
-                id: leds_button_right
-
-
-  - id: led_on_nightlight
-    mode: restart
-    then:
-      - light.turn_on:
-          id: leds_nightlight
-          brightness: ${nightlight_brightness}
-          red: !lambda "return id(nightlight_color)[0]/100.0;"
-          green: !lambda "return id(nightlight_color)[1]/100.0;"
-          blue:  !lambda "return id(nightlight_color)[2]/100.0;"
 
   - id: led_on_release
     mode: restart
