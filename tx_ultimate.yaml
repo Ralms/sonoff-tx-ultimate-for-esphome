@@ -292,12 +292,14 @@ switch:
     name: "Relay 1 Linked Mode"
     id: relay_1_mode
     optimistic: true
+    entity_category: config
 
   ## CONFIGURATION Relay 2 mode
   - platform: template
     name: "Relay 2 Linked Mode"
     id: relay_2_mode
     optimistic: true
+    entity_category: config
 
 button: 
     ## CONFIGURATION Restart
@@ -419,6 +421,7 @@ light:
     name: "Touch Left"
     id: touch_left_config
     internal: false
+    entity_category: config
     segments:
       - id: leds
         from: 28
@@ -435,6 +438,7 @@ light:
     name: "Touch Right"
     id: touch_right_config
     internal: false
+    entity_category: config
     segments:
       - id: leds
         from: 29
@@ -451,6 +455,7 @@ light:
     name: "Multitouch"
     id: multitouch_config
     internal: false
+    entity_category: config
     segments:
       - id: leds
         from: 30
@@ -467,6 +472,7 @@ light:
     name: "Swipe Left to Right"
     id: Swipe_ltr_config
     internal: false
+    entity_category: config
     segments:
       - id: leds
         from: 31
@@ -483,6 +489,7 @@ light:
     name: "Swipe Right to Left"
     id: Swipe_rtl_config
     internal: false
+    entity_category: config
     segments:
       - id: leds
         from: 32
@@ -499,6 +506,7 @@ light:
     name: "Ambiance"
     id: led_ambiance_config
     internal: false
+    entity_category: config
     segments:
       - id: leds
         from: 33
