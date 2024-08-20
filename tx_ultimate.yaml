@@ -347,6 +347,35 @@ light:
       - id: leds
         from: 0
         to: 27
+    effects:
+      - addressable_scan:
+          name: "Scan"
+      - addressable_rainbow:
+          name: "Rainbow"
+          speed: 10
+          width: 20
+      - addressable_twinkle:
+          name: "Twinkle"
+          twinkle_probability: 5%
+          progress_interval: 15ms
+      - addressable_random_twinkle:
+          name: "Rainbow Twinkle"
+          twinkle_probability: 5%
+          progress_interval: 32ms
+      - addressable_color_wipe:
+          name: "Color Wipe"
+          colors:
+            - red: 100%
+              green: 100%
+              blue: 100%
+              num_leds: 1
+              gradient: true
+            - red: 0%
+              green: 0%
+              blue: 0%
+              num_leds: 1
+          add_led_interval: 100ms
+          reverse: false
 
   - platform: partition
     name: "LEDs Button right"
