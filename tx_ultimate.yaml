@@ -532,7 +532,7 @@ light:
               num_leds: 1
           add_led_interval: 100ms
           reverse: false
-              
+
     on_turn_on:
       then:
         - light.turn_on: leds_all 
@@ -666,6 +666,7 @@ script:
 
   - id: refresh_led_default
     mode: restart
+    then:
 
 ## Old Scripts
   - id: refresh_led_default
