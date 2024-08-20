@@ -664,10 +664,6 @@ time:
 
 script:
 
-  - id: refresh_led_default
-    mode: restart
-    then:
-
 ## Old Scripts
   - id: refresh_led_default
     mode: restart
