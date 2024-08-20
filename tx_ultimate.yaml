@@ -291,11 +291,15 @@ switch:
   - platform: template
     name: "Relay 1 Linked Mode"
     id: relay_1_mode
+    restore_value: true
+    optimistic: true
 
   ## CONFIGURATION Relay 2 mode
   - platform: template
     name: "Relay 2 Linked Mode"
     id: relay_2_mode
+    restore_value: true
+    optimistic: true
 
 button: 
     ## CONFIGURATION Restart
@@ -667,8 +671,6 @@ script:
 
   - id: refresh_led_default
     mode: restart
-
-
 
 ## Old Scripts
   - id: refresh_led_default
