@@ -503,10 +503,9 @@ light:
           width: 20
 
   - platform: partition
-    name: "Ambiance"
+    name: "Ambiance Light"
     id: led_ambiance_config
     internal: false
-    entity_category: config
     segments:
       - id: leds
         from: 33
