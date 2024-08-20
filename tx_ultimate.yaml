@@ -546,12 +546,14 @@ light:
         - light.control:
             id: leds_all
             state: !lambda return "id(led_ambiance_config).state;";
-        - light.turn_on:
-            id: leds_all
-            brightness: !lambda 'return id(led_ambiance_config).current_values.get_brightness();'
-            red: !lambda 'return id(led_ambiance_config).current_values.get_red();'
-            green: !lambda 'return id(led_ambiance_config).current_values.get_green();'
-            blue: !lambda 'return id(led_ambiance_config).current_values.get_blue();'
+            brightness: !lambda 'return id(led_ambiance_config).remote_values.get_brightness();'
+            red: !lambda 'return id(led_ambiance_config).remote_values.get_red();'
+            green: !lambda 'return id(led_ambiance_config).remote_values.get_green();'
+            blue: !lambda 'return id(led_ambiance_config).remote_values.get_blue();'
+            effect: !lambda 'return id(led_ambiance_config).get_effect_name();'
+        #- light.turn_on:
+        #    id: leds_all
+
 
 media_player:
   - platform: i2s_audio
