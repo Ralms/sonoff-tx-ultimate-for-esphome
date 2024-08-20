@@ -125,7 +125,6 @@ external_components:
     components: [tx_ultimate_touch]
     
 
-
 globals:
   - id: button_color
     type: int [3]
@@ -159,25 +158,11 @@ number:
     platform: template
     entity_category: config
     unit_of_measurement: 'ms'
-    min_value: 1
-    max_value: 300
+    min_value: 50
+    max_value: 500
     initial_value: 150
     step: 1
     mode: box
-    restore_value: true
-    optimistic: true
-
-  ##### SCREEN BRIGHTNESS CONFIGURATION#####
-  # To migrate to respective Light entity. 
-  - id: config_flash_brightness
-    name: LED Flash Brightness
-    platform: template
-    entity_category: config
-    unit_of_measurement: '%'
-    min_value: 1
-    max_value: 100
-    initial_value: 100
-    step: 1
     restore_value: true
     optimistic: true
 
@@ -302,6 +287,18 @@ switch:
     internal: true
     restore_mode: RESTORE_DEFAULT_ON
 
+  ## CONFIGURATION Relay 1 mode
+  - platform: template
+    name: "Relay 1 Linked Mode"
+    id: relay_1_mode
+
+  ## CONFIGURATION Relay 2 mode
+  - platform: template
+    name: "Relay 2 Linked Mode"
+    id: relay_2_mode
+
+button: 
+    ## CONFIGURATION Restart
   - platform: restart
     name: "${friendly_name} Restart"
 
@@ -317,6 +314,8 @@ switch:
 #   - Meter (like a sound meter, going from 1 LED on to all On, increasing the number of LEDs over time)
 #   - Pulse (Turn on all LEDs at once)
 #   - Rainbow
+#   - Twinkle (like stars in the sky)
+#   - Rainbow Twinkle
 
 # All these should be configured on each respective Light entity configuration. 
 # Light entities can be turned on or off in HA, where being "off" just instructs the switch to not do any light effect with a respective touch. 
@@ -327,23 +326,23 @@ light:
     type: GRB
     variant: WS2811
     pin: ${led_pin}
-    internal: false
-    num_leds: 33 # 28 Physical LEDs, extra LEDs are used for configuration purpose.
+    internal: true
+    num_leds: 34 # 28 Physical LEDs, extra 6 LEDs are used for configuration purpose.
     name: "NeoPixel Light"
     id: leds
     default_transition_length: 0s
-    effects:
-      - addressable_rainbow:
-          name: "Rainbow"
-          speed: 30
-          width: 8
-      - pulse:
-          name: "Pulse"
-          transition_length: 1.4s
-          update_interval: 1s
     on_turn_off:
       then:
         - script.execute: refresh_led_default
+
+  - platform: partition
+    name: "LEDs All"
+    id: leds_all
+    internal: true
+    segments:
+      - id: leds
+        from: 0
+        to: 27
 
   - platform: partition
     name: "LEDs Button right"
@@ -355,7 +354,6 @@ light:
         to: 7
     on_state: 
       then: 
-        - script.execute: blockAction
         
   - platform: partition
     name: "LEDs Button middle"
@@ -365,6 +363,7 @@ light:
       - id: leds
         from: 9
         to: 9
+
   - platform: partition
     name: "LEDs Button left"
     id: leds_button_left
@@ -416,12 +415,145 @@ light:
 
   - platform: partition
     name: "Touch Left"
-    id: touch_left
+    id: touch_left_config
     internal: false
     segments:
       - id: leds
         from: 28
         to: 28
+    effects:
+      - addressable_scan:
+          name: "Scan"
+      - addressable_rainbow:
+          name: "Rainbow"
+          speed: 10
+          width: 20
+  
+  - platform: partition
+    name: "Touch Right"
+    id: touch_right_config
+    internal: false
+    segments:
+      - id: leds
+        from: 29
+        to: 29
+    effects:
+      - addressable_scan:
+          name: "Scan"
+      - addressable_rainbow:
+          name: "Rainbow"
+          speed: 10
+          width: 20
+
+  - platform: partition
+    name: "Multitouch"
+    id: multitouch_config
+    internal: false
+    segments:
+      - id: leds
+        from: 30
+        to: 30
+    effects:
+      - addressable_scan:
+          name: "Scan"
+      - addressable_rainbow:
+          name: "Rainbow"
+          speed: 10
+          width: 20
+  
+  - platform: partition
+    name: "Swipe Left to Right"
+    id: Swipe_ltr_config
+    internal: false
+    segments:
+      - id: leds
+        from: 31
+        to: 31
+    effects:
+      - addressable_scan:
+          name: "Scan"
+      - addressable_rainbow:
+          name: "Rainbow"
+          speed: 10
+          width: 20
+
+  - platform: partition
+    name: "Swipe Right to Left"
+    id: Swipe_rtl_config
+    internal: false
+    segments:
+      - id: leds
+        from: 32
+        to: 32
+    effects:
+      - addressable_scan:
+          name: "Scan"
+      - addressable_rainbow:
+          name: "Rainbow"
+          speed: 10
+          width: 20
+
+  - platform: partition
+    name: "Ambiance"
+    id: led_ambiance_config
+    internal: false
+    segments:
+      - id: leds
+        from: 33
+        to: 33
+    effects:
+      - addressable_scan:
+          name: "Scan"
+      - addressable_rainbow:
+          name: "Rainbow"
+          speed: 10
+          width: 20
+      - addressable_twinkle:
+          name: "Twinkle"
+          twinkle_probability: 5%
+          progress_interval: 15ms
+      - addressable_random_twinkle:
+          name: "Rainbow Twinkle"
+          twinkle_probability: 5%
+          progress_interval: 32ms
+      - addressable_color_wipe:
+          name: "Color Wipe"
+          colors:
+            - red: 100%
+              green: 100%
+              blue: 100%
+              num_leds: 1
+              gradient: true
+            - red: 0%
+              green: 0%
+              blue: 0%
+              num_leds: 1
+          add_led_interval: 100ms
+          reverse: false
+    on_toggle:
+      then:
+        - light.toggle: leds_all
+    
+    on_turn_on:
+      then:
+        - light.turn_on: leds_all 
+    
+    on_turn_off: 
+      then:
+        - light.turn_off: leds_all
+    
+    on_state: 
+      then:
+        - light.control:
+            id: leds_all
+            state: !lambda return "id(led_ambiance_config).state;";
+        - light.turn_on:
+            id: leds_all
+            brightness: !lambda 'return id(led_ambiance_config).current_values.get_brightness();'
+            red: !lambda 'return id(led_ambiance_config).current_values.get_red();'
+            green: !lambda 'return id(led_ambiance_config).current_values.get_green();'
+            blue: !lambda 'return id(led_ambiance_config).current_values.get_blue();'
+            effect: !lambda 'return id(led_ambiance_config).current_values.get_effect_name();'
 
 media_player:
   - platform: i2s_audio
@@ -532,11 +664,13 @@ time:
      #     - script.execute: refresh_nightlight
 
 script:
-  - id: blockAction
-    mode: restart
-    then:
-      - logger.log: "BlockedLight"
 
+  - id: refresh_led_default
+    mode: restart
+
+
+
+## Old Scripts
   - id: refresh_led_default
     mode: restart
     then:
