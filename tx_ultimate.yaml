@@ -552,7 +552,6 @@ light:
             red: !lambda 'return id(led_ambiance_config).current_values.get_red();'
             green: !lambda 'return id(led_ambiance_config).current_values.get_green();'
             blue: !lambda 'return id(led_ambiance_config).current_values.get_blue();'
-            effect: !lambda 'return id(led_ambiance_config).current_values.get_effect_name();'
 
 media_player:
   - platform: i2s_audio
