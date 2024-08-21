@@ -173,7 +173,7 @@ binary_sensor:
     on_press:
       - if:
           condition:
-            lambda: "return ${toggle_relay_1_on_touch};"
+            lambda: "return id(relay_1_mode).state;"
           then:
             - switch.toggle: relay_1
       - delay: ${button_on_time}
@@ -188,7 +188,7 @@ binary_sensor:
     on_press:
       - if:
           condition:
-            lambda: "return ${toggle_relay_2_on_touch};"
+            lambda: "return id(relay_2_mode).state;"
           then:
             - switch.toggle: relay_2
       - delay: ${button_on_time}
@@ -434,6 +434,7 @@ light:
     name: "LEDs Top"
     id: leds_top
     internal: true
+    default_transition_length: 0
     segments:
       - id: leds
         from: 20
@@ -696,6 +697,12 @@ script:
   - id: update_ambiance
     mode: restart
     then: 
+      - if: 
+        condition: 
+          light.is_on: leds_all
+        then:
+          light.turn_on: leds_all
+
       - light.control:
           id: leds_all
           state: !lambda return "id(led_ambiance_config).state;";
@@ -710,7 +717,7 @@ script:
   - id: refresh_led_default
     mode: restart
     then:
-      #- light.turn_off: leds_top
+      - light.turn_off: leds_top
       - script.execute: update_ambiance
       - if:
           condition:
