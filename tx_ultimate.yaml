@@ -322,13 +322,26 @@ button:
 
 
 light:
-  - platform: neopixelbus
-    type: GRB
-    variant: WS2811
+  #- platform: neopixelbus
+  #  type: GRB
+  #  variant: WS2811
+  #  pin: ${led_pin}
+  #  internal: true
+  #  num_leds: 34 # 28 Physical LEDs, extra 6 LEDs are used for configuration purpose.
+  #  name: "NeoPixel Light"
+  #  id: leds
+  #  default_transition_length: 0s
+  #  on_turn_off:
+  #    then:
+  #      - script.execute: refresh_led_default
+
+  - platform: esp32_rmt_led_strip
+    chipset: WS2812
+    rmt_channel: 0
+    rgb_order : GRB
     pin: ${led_pin}
     internal: true
     num_leds: 34 # 28 Physical LEDs, extra 6 LEDs are used for configuration purpose.
-    name: "NeoPixel Light"
     id: leds
     default_transition_length: 0s
     on_turn_off:
