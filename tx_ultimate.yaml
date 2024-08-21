@@ -697,12 +697,6 @@ script:
   - id: update_ambiance
     mode: restart
     then: 
-      - if: 
-          condition: 
-            light.is_on: led_ambiance_config
-          then:
-            light.turn_on: leds_all
-
       - light.control:
           id: leds_all
           state: !lambda return "id(led_ambiance_config).state;";
