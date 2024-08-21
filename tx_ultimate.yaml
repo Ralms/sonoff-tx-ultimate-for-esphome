@@ -172,8 +172,9 @@ binary_sensor:
     id: touchfield_1
     on_press:
       - if:
+      # id(relay_1_mode).state;
           condition:
-            lambda: "return id(relay_1_mode).state;"
+            lambda: "return false;"
           then:
             - switch.toggle: relay_1
       - delay: ${button_on_time}
@@ -187,8 +188,9 @@ binary_sensor:
     id: touchfield_2
     on_press:
       - if:
+      # id(relay_2_mode).state
           condition:
-            lambda: "return id(relay_2_mode).state;"
+            lambda: "return false;"
           then:
             - switch.toggle: relay_2
       - delay: ${button_on_time}
