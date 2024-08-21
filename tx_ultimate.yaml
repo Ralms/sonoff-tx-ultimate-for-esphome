@@ -91,14 +91,14 @@ esp32:
 
 logger:
 #  hardware_uart: UART2
-  level: VERBOSE
+  level: INFO
   logs:
     binary_sensor: INFO
     light: INFO
     script: INFO
     switch: INFO
-    tx_ultimate_touch: VERBOSE
-    uart_debug: DEBUG
+    tx_ultimate_touch: INFO
+    uart_debug: INFO
 
 dashboard_import:
   package_import_url: github://Ralms/sonoff-tx-ultimate-for-esphome/tx_ultimate.yaml@main
@@ -621,8 +621,8 @@ tx_ultimate_touch:
   uart: my_uart
 
   on_press:
-    - script.execute: led_on_touch
     - switch.turn_on: vibra
+    - script.execute: led_on_touch
     - lambda: >
         ESP_LOGD("tx_ultimate_touch.on_press", "Touch Position: %d / State: %d", touch.x, touch.state);
 
@@ -710,7 +710,7 @@ script:
   - id: refresh_led_default
     mode: restart
     then:
-      - light.turn_off: leds_top
+      #- light.turn_off: leds_top
       - script.execute: update_ambiance
       - if:
           condition:
