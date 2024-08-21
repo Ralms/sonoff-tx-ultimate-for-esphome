@@ -699,7 +699,7 @@ script:
     then: 
       - if: 
           condition: 
-            light.is_on: leds_all
+            light.is_on: led_ambiance_config
           then:
             light.turn_on: leds_all
 
