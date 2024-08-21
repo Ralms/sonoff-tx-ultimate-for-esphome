@@ -4,11 +4,6 @@ substitutions:
 
   relay_count: "2"
 
-  toggle_relay_1_on_touch: "true"
-  toggle_relay_2_on_touch: "true"
-  toggle_relay_3_on_touch: "true"
-
-  vibra_time: 150ms
   button_on_time: 500ms
 
   button_brightness: "0.7"
@@ -107,6 +102,7 @@ dashboard_import:
 api:
 
 ota:
+  - platform: esphome
 
 wifi:
   ap:
@@ -172,9 +168,8 @@ binary_sensor:
     id: touchfield_1
     on_press:
       - if:
-      # id(relay_1_mode).state;
           condition:
-            lambda: "return false;"
+            lambda: "return id(relay_1_mode).state;"
           then:
             - switch.toggle: relay_1
       - delay: ${button_on_time}
@@ -188,9 +183,8 @@ binary_sensor:
     id: touchfield_2
     on_press:
       - if:
-      # id(relay_2_mode).state
           condition:
-            lambda: "return false;"
+            lambda: "return id(relay_2_mode).state;"
           then:
             - switch.toggle: relay_2
       - delay: ${button_on_time}
