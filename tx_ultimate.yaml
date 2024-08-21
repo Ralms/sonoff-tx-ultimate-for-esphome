@@ -442,7 +442,7 @@ light:
     name: "LEDs Top"
     id: leds_top
     internal: true
-    default_transition_length: 10ms
+    default_transition_length: 0ms
     segments:
       - id: leds
         from: 20
