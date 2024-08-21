@@ -579,16 +579,7 @@ light:
     
     on_state: 
       then:
-        - light.control:
-            id: leds_all
-            state: !lambda return "id(led_ambiance_config).state;";
-            brightness: !lambda 'return id(led_ambiance_config).remote_values.get_brightness();'
-            red: !lambda 'return id(led_ambiance_config).remote_values.get_red();'
-            green: !lambda 'return id(led_ambiance_config).remote_values.get_green();'
-            blue: !lambda 'return id(led_ambiance_config).remote_values.get_blue();'
-            effect: !lambda 'return id(led_ambiance_config).get_effect_name();'
-        #- light.turn_on:
-        #    id: leds_all
+        - script.execute: update_ambiance
 
 
 media_player:
@@ -700,13 +691,25 @@ time:
      #     - script.execute: refresh_nightlight
 
 script:
+  - id: update_ambiance
+    mode: restart
+    then: 
+      - light.control:
+          id: leds_all
+          state: !lambda return "id(led_ambiance_config).state;";
+          brightness: !lambda 'return id(led_ambiance_config).remote_values.get_brightness();'
+          red: !lambda 'return id(led_ambiance_config).remote_values.get_red();'
+          green: !lambda 'return id(led_ambiance_config).remote_values.get_green();'
+          blue: !lambda 'return id(led_ambiance_config).remote_values.get_blue();'
+          effect: !lambda 'return id(led_ambiance_config).get_effect_name();'
+
 
 ## Old Scripts
   - id: refresh_led_default
     mode: restart
     then:
       - light.turn_off: leds_top
-
+      - script.execute: update_ambiance
       - if:
           condition:
             lambda: "return (${relay_count}>1 && id(relay_1).state) ;"
