@@ -534,7 +534,9 @@ light:
   - platform: partition
     name: "Ambiance Light"
     id: led_ambiance_config
+    entity_category: config
     internal: false
+    restore_mode: RESTORE_DEFAULT_OFF 
     segments:
       - id: leds
         from: 33
